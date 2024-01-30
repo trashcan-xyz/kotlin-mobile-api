@@ -19,8 +19,7 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: moduleName,
-            url: "https://github.com/trashcan-xyz/kotlin-mobile-api/raw/main/package/shared.framework.zip",
-            checksum: checksum
+            url: "https://github.com/trashcan-xyz/kotlin-mobile-api/raw/main/package/shared.framework",
         )
     ]
 )
