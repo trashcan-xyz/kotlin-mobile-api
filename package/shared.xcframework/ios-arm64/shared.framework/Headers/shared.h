@@ -6,7 +6,9 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSValue.h>
 
-@protocol SharedPlatform;
+@class SharedTodoItem;
+
+@protocol SharedPlatform, SharedTodoRepository;
 
 NS_ASSUME_NONNULL_BEGIN
 #pragma clang diagnostic push
@@ -162,6 +164,65 @@ __attribute__((swift_name("IOSPlatform")))
 - (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
 + (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
 @property (readonly) NSString *name __attribute__((swift_name("name")));
+@end
+
+__attribute__((swift_name("TodoRepository")))
+@protocol SharedTodoRepository
+@required
+- (void)addItemItem:(SharedTodoItem *)item __attribute__((swift_name("addItem(item:)")));
+- (NSArray<SharedTodoItem *> *)getAllItems __attribute__((swift_name("getAllItems()")));
+- (SharedTodoItem * _Nullable)getItemItemId:(int32_t)itemId __attribute__((swift_name("getItem(itemId:)")));
+- (void)removeItemItemId:(int32_t)itemId __attribute__((swift_name("removeItem(itemId:)")));
+- (void)updateItemItem:(SharedTodoItem *)item __attribute__((swift_name("updateItem(item:)")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("InMemoryTodoRepository")))
+@interface SharedInMemoryTodoRepository : SharedBase <SharedTodoRepository>
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+- (void)addItemItem:(SharedTodoItem *)item __attribute__((swift_name("addItem(item:)")));
+- (NSArray<SharedTodoItem *> *)getAllItems __attribute__((swift_name("getAllItems()")));
+- (SharedTodoItem * _Nullable)getItemItemId:(int32_t)itemId __attribute__((swift_name("getItem(itemId:)")));
+- (void)removeItemItemId:(int32_t)itemId __attribute__((swift_name("removeItem(itemId:)")));
+- (void)updateItemItem:(SharedTodoItem *)item __attribute__((swift_name("updateItem(item:)")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("TodoItem")))
+@interface SharedTodoItem : SharedBase
+- (instancetype)initWithId:(int32_t)id title:(NSString *)title description:(NSString * _Nullable)description isCompleted:(BOOL)isCompleted __attribute__((swift_name("init(id:title:description:isCompleted:)"))) __attribute__((objc_designated_initializer));
+- (SharedTodoItem *)doCopyId:(int32_t)id title:(NSString *)title description:(NSString * _Nullable)description isCompleted:(BOOL)isCompleted __attribute__((swift_name("doCopy(id:title:description:isCompleted:)")));
+- (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
+- (NSUInteger)hash __attribute__((swift_name("hash()")));
+- (NSString *)description __attribute__((swift_name("description()")));
+@property (setter=setDescription:) NSString * _Nullable description_ __attribute__((swift_name("description_")));
+@property (readonly) int32_t id __attribute__((swift_name("id")));
+@property BOOL isCompleted __attribute__((swift_name("isCompleted")));
+@property NSString *title __attribute__((swift_name("title")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("TodoList")))
+@interface SharedTodoList : SharedBase
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+- (void)addItemItem:(SharedTodoItem *)item __attribute__((swift_name("addItem(item:)")));
+- (NSArray<SharedTodoItem *> *)getAllItems __attribute__((swift_name("getAllItems()")));
+- (SharedTodoItem * _Nullable)getItemItemId:(int32_t)itemId __attribute__((swift_name("getItem(itemId:)")));
+- (void)markItemCompleteItemId:(int32_t)itemId __attribute__((swift_name("markItemComplete(itemId:)")));
+- (void)removeItemItemId:(int32_t)itemId __attribute__((swift_name("removeItem(itemId:)")));
+@end
+
+__attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("TodoService")))
+@interface SharedTodoService : SharedBase
+- (instancetype)initWithRepository:(id<SharedTodoRepository>)repository __attribute__((swift_name("init(repository:)"))) __attribute__((objc_designated_initializer));
+- (void)addTodoItemItem:(SharedTodoItem *)item __attribute__((swift_name("addTodoItem(item:)")));
+- (NSArray<SharedTodoItem *> *)getAllTodoItems __attribute__((swift_name("getAllTodoItems()")));
+- (SharedTodoItem * _Nullable)getTodoItemItemId:(int32_t)itemId __attribute__((swift_name("getTodoItem(itemId:)")));
+- (void)markTodoItemCompleteItemId:(int32_t)itemId __attribute__((swift_name("markTodoItemComplete(itemId:)")));
+- (void)removeTodoItemItemId:(int32_t)itemId __attribute__((swift_name("removeTodoItem(itemId:)")));
 @end
 
 __attribute__((objc_subclassing_restricted))
